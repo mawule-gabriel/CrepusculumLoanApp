@@ -50,17 +50,15 @@ public class Borrower implements UserDetails {
     @Column(name = "created_at")
     private LocalDate createdAt = LocalDate.now();
 
-
     @OneToOne(mappedBy = "borrower", cascade = CascadeType.ALL)
     private Loan loan;
 
     @Enumerated(EnumType.STRING)
     private Role role = Role.BORROWER;
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
     @Override
