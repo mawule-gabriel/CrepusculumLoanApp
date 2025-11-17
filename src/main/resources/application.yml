@@ -1,1 +1,21 @@
-spring.application.name=travel-loan-manager
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/loan-manager
+    username: postgres
+    password: masters123
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+jwt:
+  secret: ${JWT_SECRET:your-256-bit-secret-key-here-1234567890}
+  expiration: 86400000
+
+logging:
+  level:
+    org.springframework.security: DEBUG
