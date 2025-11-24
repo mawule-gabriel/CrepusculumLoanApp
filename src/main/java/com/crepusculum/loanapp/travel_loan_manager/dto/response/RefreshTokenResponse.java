@@ -1,10 +1,8 @@
 package com.crepusculum.loanapp.travel_loan_manager.dto.response;
 
-public record JwtResponse(
+public record RefreshTokenResponse(
         String accessToken,
         String refreshToken,
-        String role,
-        String name,
         long expiresIn
 ) {
 }
