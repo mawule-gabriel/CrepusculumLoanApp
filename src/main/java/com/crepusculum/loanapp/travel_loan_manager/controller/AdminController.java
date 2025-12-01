@@ -3,8 +3,10 @@ package com.crepusculum.loanapp.travel_loan_manager.controller;
 import com.crepusculum.loanapp.travel_loan_manager.dto.request.RecordPaymentRequest;
 import com.crepusculum.loanapp.travel_loan_manager.dto.request.RegisterBorrowerRequest;
 import com.crepusculum.loanapp.travel_loan_manager.dto.response.BorrowerSummaryResponse;
+import com.crepusculum.loanapp.travel_loan_manager.service.AdminDashboardService;
 import com.crepusculum.loanapp.travel_loan_manager.service.AdminService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,7 @@ import java.util.List;
 public class AdminController {
 
     private final AdminService adminService;
+    private final AdminDashboardService adminDashboardService;
 
     @PostMapping(value = "/borrowers", consumes = "multipart/form-data")
     public ResponseEntity<String> registerBorrower(@ModelAttribute RegisterBorrowerRequest request) {
@@ -32,8 +35,16 @@ public class AdminController {
     }
 
     @GetMapping("/borrowers")
-    public ResponseEntity<List<BorrowerSummaryResponse>> getAllBorrowers() {
-        List<BorrowerSummaryResponse> borrowers = adminService.getAllBorrowerSummaries();
-        return ResponseEntity.ok(borrowers);
+    public ResponseEntity<Page<BorrowerSummaryResponse>> getAllBorrowers(
+            @RequestParam(required = false) String search,
+            @RequestParam(defaultValue = "On Track,Delayed,Completed") List<String> status,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortDir) {
+
+        Page<BorrowerSummaryResponse> result = adminDashboardService.searchBorrowers(
+                search, String.join(",", status), page, size, sortBy, sortDir);
+        return ResponseEntity.ok(result);
     }
 }
