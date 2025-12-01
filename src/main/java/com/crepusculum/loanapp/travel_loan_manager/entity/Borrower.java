@@ -50,8 +50,11 @@ public class Borrower implements UserDetails {
     @Column(name = "created_at")
     private LocalDate createdAt = LocalDate.now();
 
-    @OneToOne(mappedBy = "borrower", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "borrower", cascade = CascadeType.ALL, orphanRemoval = true)
     private Loan loan;
+
+    @OneToOne(mappedBy = "borrower", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Guarantor guarantor;
 
     @Enumerated(EnumType.STRING)
     private Role role = Role.BORROWER;
