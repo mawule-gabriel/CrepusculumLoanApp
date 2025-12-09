@@ -2,13 +2,11 @@ package com.crepusculum.loanapp.travel_loan_manager.service;
 
 import com.crepusculum.loanapp.travel_loan_manager.dto.request.RecordPaymentRequest;
 import com.crepusculum.loanapp.travel_loan_manager.dto.request.RegisterBorrowerRequest;
-import com.crepusculum.loanapp.travel_loan_manager.dto.response.BorrowerSummaryResponse;
 import com.crepusculum.loanapp.travel_loan_manager.entity.Borrower;
+import com.crepusculum.loanapp.travel_loan_manager.entity.Loan;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -16,12 +14,38 @@ public class AdminService {
 
     private final BorrowerService borrowerService;
     private final PaymentService paymentService;
-    private final AdminDashboardService dashboardService;
 
     @Transactional
     public String registerBorrower(RegisterBorrowerRequest request) {
         Borrower borrower = borrowerService.createBorrowerWithGuarantor(request);
-        String defaultPassword = request.phoneNumber().substring(request.phoneNumber().length() - 8);
+        return formatRegistrationMessage(borrower, request);
+    }
+
+    @Transactional
+    public String recordPayment(RecordPaymentRequest request) {
+        Borrower borrower = borrowerService.findById(request.borrowerId());
+        Loan loan = validateAndGetLoan(borrower);
+
+        paymentService.recordPayment(
+                loan,
+                request.amountPaid(),
+                request.note(),
+                "ADMIN"
+        );
+
+        return "Payment recorded successfully";
+    }
+
+    private Loan validateAndGetLoan(Borrower borrower) {
+        if (borrower.getLoan() == null) {
+            throw new IllegalStateException("Borrower does not have an active loan");
+        }
+        return borrower.getLoan();
+    }
+
+    private String formatRegistrationMessage(Borrower borrower, RegisterBorrowerRequest request) {
+        String defaultPassword = request.phoneNumber()
+                .substring(request.phoneNumber().length() - 8);
 
         return String.format(
                 """
@@ -40,27 +64,5 @@ public class AdminService {
                 borrower.getLoan().getMonthlyPayment(),
                 defaultPassword
         );
-    }
-
-    @Transactional
-    public String recordPayment(RecordPaymentRequest request) {
-        Borrower borrower = borrowerService.findById(request.borrowerId());
-
-        if (borrower.getLoan() == null) {
-            throw new IllegalStateException("Borrower does not have an active loan");
-        }
-
-        paymentService.recordPayment(
-                borrower.getLoan(),
-                request.amountPaid(),
-                request.note(),
-                "ADMIN"
-        );
-
-        return "Payment recorded successfully";
-    }
-
-    public List<BorrowerSummaryResponse> getAllBorrowerSummaries() {
-        return dashboardService.getAllBorrowerSummaries();
     }
 }
