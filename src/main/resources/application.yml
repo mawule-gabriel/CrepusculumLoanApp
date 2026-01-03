@@ -11,6 +11,10 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
 
 jwt:
   secret: ${JWT_SECRET:dGhpcy1pcy1hLXNlY3VyZS0yNTYtYml0LXNlY3JldC1rZXktZm9yLWp3dA==}
@@ -33,3 +37,10 @@ cloudinary:
 logging:
   level:
     org.springframework.security: DEBUG
+
+# Admin Seeder Configuration
+admin:
+  phone: ${ADMIN_PHONE:?ADMIN_PHONE must be set}
+  password: ${ADMIN_PASSWORD:?ADMIN_PASSWORD must be set}
+  full-name: ${ADMIN_FULL_NAME:?ADMIN_FULL_NAME must be set}
+  ghana-card: ${ADMIN_GHANA_CARD:?ADMIN_GHANA_CARD must be set}
