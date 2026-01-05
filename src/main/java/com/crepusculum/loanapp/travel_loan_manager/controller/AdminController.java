@@ -54,4 +54,9 @@ public class AdminController {
     public ResponseEntity<byte[]> downloadSchedule(@PathVariable Long id) {
         return pdfExportService.generateRepaymentSchedulePdf(id);
     }
+
+    @GetMapping("/borrowers/{id}")
+    public ResponseEntity<com.crepusculum.loanapp.travel_loan_manager.dto.response.BorrowerDetailResponse> getBorrowerDetails(@PathVariable Long id) {
+        return ResponseEntity.ok(adminService.getBorrowerDetails(id));
+    }
 }

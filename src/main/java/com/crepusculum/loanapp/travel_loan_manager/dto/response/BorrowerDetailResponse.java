@@ -20,6 +20,7 @@ public record BorrowerDetailResponse(
         LocalDate startDate,
         LocalDate endDate,
         int monthsDuration,
+        int monthsPaid,
 
         String guarantorName,
         String guarantorPhone,
