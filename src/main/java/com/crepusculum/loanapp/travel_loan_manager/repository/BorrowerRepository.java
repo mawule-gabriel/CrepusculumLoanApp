@@ -12,6 +12,8 @@ import java.util.Optional;
 public interface BorrowerRepository extends JpaRepository<Borrower, Long> {
     Optional<Borrower> findByPhoneNumber(String phoneNumber);
 
+    Optional<Borrower> findByGhanaCardNumber(String ghanaCardNumber);
+
     boolean existsByPhoneNumber(String phoneNumber);
 
     boolean existsByGhanaCardNumber(String ghanaCardNumber);

@@ -4,15 +4,14 @@ import com.crepusculum.loanapp.travel_loan_manager.entity.Borrower;
 import com.crepusculum.loanapp.travel_loan_manager.entity.Role;
 import com.crepusculum.loanapp.travel_loan_manager.repository.BorrowerRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
 public class AdminSeeder implements CommandLineRunner {
 
     private final BorrowerRepository borrowerRepository;
@@ -35,10 +34,12 @@ public class AdminSeeder implements CommandLineRunner {
         createAdminIfNotExists();
     }
 
-    private void createAdminIfNotExists() {
-        if (borrowerRepository.existsByPhoneNumber(adminPhone) ||
-                borrowerRepository.existsByGhanaCardNumber(adminGhanaCard)) {
-            log.info("Admin user already exists. Skipping admin creation.");
+    @Transactional
+    public void createAdminIfNotExists() {
+        boolean phoneExists = borrowerRepository.existsByPhoneNumber(adminPhone);
+        boolean cardExists = borrowerRepository.existsByGhanaCardNumber(adminGhanaCard);
+
+        if (phoneExists || cardExists) {
             return;
         }
 
@@ -53,10 +54,5 @@ public class AdminSeeder implements CommandLineRunner {
                 .build();
 
         borrowerRepository.save(admin);
-        log.info("=================================================");
-        log.info("Admin user created successfully!");
-        log.info("Phone Number: {}", adminPhone);
-        log.info("IMPORTANT: Change these credentials in production!");
-        log.info("=================================================");
     }
 }
