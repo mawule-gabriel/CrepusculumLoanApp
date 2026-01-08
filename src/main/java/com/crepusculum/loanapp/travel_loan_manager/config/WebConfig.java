@@ -20,7 +20,8 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
                 .allowedOrigins("http://localhost:5173", "http://localhost:3000", "http://localhost:8081", 
-                               "http://127.0.0.1:5173", "http://172.20.10.12:8081", "http://172.20.10.12:5173")
+                               "http://127.0.0.1:5173", "http://172.20.10.12:8081", "http://172.20.10.12:5173",
+                               "https://travel-loan-vista.onrender.com")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
                 .allowedHeaders("*")
                 .allowCredentials(true)
@@ -31,7 +32,8 @@ public class WebConfig implements WebMvcConfigurer {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://localhost:3000", "http://localhost:8081",
-                                                      "http://127.0.0.1:5173", "http://172.20.10.12:8081", "http://172.20.10.12:5173"));
+                                                      "http://127.0.0.1:5173", "http://172.20.10.12:8081", "http://172.20.10.12:5173",
+                                                      "https://travel-loan-vista.onrender.com"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
