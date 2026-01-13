@@ -28,6 +28,8 @@ public class Payment {
     @Column(name = "recorded_by")
     private String recordedBy;
 
+    private String note;
+
     @ManyToOne
     @JoinColumn(name = "loan_id", nullable = false)
     private Loan loan;
