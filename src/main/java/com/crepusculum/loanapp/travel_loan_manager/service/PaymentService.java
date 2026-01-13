@@ -24,6 +24,7 @@ public class PaymentService {
                 .amountPaid(amount)
                 .paymentDate(LocalDate.now())
                 .recordedBy(recordedBy)
+                .note(note)
                 .loan(loan)
                 .build();
 
