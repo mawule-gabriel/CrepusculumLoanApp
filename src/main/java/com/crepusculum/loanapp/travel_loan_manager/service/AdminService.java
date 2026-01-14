@@ -72,6 +72,7 @@ public class AdminService {
         );
     }
 
+    @Transactional(readOnly = true)
     public BorrowerDetailResponse getBorrowerDetails(Long id) {
         Borrower borrower = borrowerService.findById(id);
         Loan loan = borrower.getLoan();
@@ -87,7 +88,7 @@ public class AdminService {
                         p.getAmountPaid(),
                         p.getPaymentDate(),
                         p.getRecordedBy(),
-                        null
+                        p.getNote()
                 ))
                 .toList();
 
