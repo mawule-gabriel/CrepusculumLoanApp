@@ -20,6 +20,14 @@ spring:
     multipart:
       max-file-size: 5MB
       max-request-size: 5MB
+  mail:
+    host: ${SMTP_HOST:smtp.gmail.com}
+    port: ${SMTP_PORT:587}
+    username: ${SMTP_USERNAME:}
+    password: ${SMTP_PASSWORD:}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
 
 jwt:
   secret: ${JWT_SECRET:dGhpcy1pcy1hLXNlY3VyZS0yNTYtYml0LXNlY3JldC1rZXktZm9yLWp3dA==}
@@ -43,9 +51,13 @@ logging:
   level:
     org.springframework.security: DEBUG
 
-# Admin Seeder Configuration
 admin:
   phone: ${ADMIN_PHONE:?ADMIN_PHONE must be set}
   password: ${ADMIN_PASSWORD:?ADMIN_PASSWORD must be set}
   full-name: ${ADMIN_FULL_NAME:?ADMIN_FULL_NAME must be set}
   ghana-card: ${ADMIN_GHANA_CARD:?ADMIN_GHANA_CARD must be set}
+
+app:
+  password-reset:
+    token-expiry-minutes: 60
+    frontend-reset-url: ${FRONTEND_URL:https://travel-loan-vista.onrender.com}/reset-password
