@@ -44,6 +44,11 @@ public class Borrower implements UserDetails {
     @Column(name = "profile_picture_path")
     private String profilePicturePath;
 
+    private String email;
+
+    @Column(name = "password_reset_required")
+    private Boolean passwordResetRequired = false;
+
     @Column(nullable = false)
     private String password;
 
