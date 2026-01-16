@@ -47,13 +47,15 @@ public class AuthService {
 
         String role = extractUserRole(userDetails);
         String name = extractUserName(userDetails);
+        boolean passwordResetRequired = extractPasswordResetRequired(userDetails);
 
         return new JwtResponse(
                 accessToken,
                 refreshToken.getToken(),
                 role,
                 name,
-                accessTokenExpiration / 1000
+                accessTokenExpiration / 1000,
+                passwordResetRequired
         );
     }
 
@@ -113,5 +115,12 @@ public class AuthService {
             return borrower.getFullName();
         }
         return "User";
+    }
+
+    private boolean extractPasswordResetRequired(UserDetails userDetails) {
+        if (userDetails instanceof Borrower borrower) {
+            return Boolean.TRUE.equals(borrower.getPasswordResetRequired());
+        }
+        return false;
     }
 }
