@@ -5,6 +5,7 @@ public record JwtResponse(
         String refreshToken,
         String role,
         String name,
-        long expiresIn
+        long expiresIn,
+        boolean passwordResetRequired
 ) {
 }
