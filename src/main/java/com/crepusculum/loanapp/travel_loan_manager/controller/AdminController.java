@@ -1,16 +1,20 @@
 package com.crepusculum.loanapp.travel_loan_manager.controller;
 
+import com.crepusculum.loanapp.travel_loan_manager.dto.request.AdminResetPasswordRequest;
 import com.crepusculum.loanapp.travel_loan_manager.dto.request.RecordPaymentRequest;
 import com.crepusculum.loanapp.travel_loan_manager.dto.request.RegisterBorrowerRequest;
 import com.crepusculum.loanapp.travel_loan_manager.dto.response.BorrowerSummaryResponse;
 import com.crepusculum.loanapp.travel_loan_manager.service.AdminService;
 import com.crepusculum.loanapp.travel_loan_manager.service.BorrowerQueryService;
+import com.crepusculum.loanapp.travel_loan_manager.service.PasswordResetService;
 import com.crepusculum.loanapp.travel_loan_manager.service.PdfExportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -21,6 +25,7 @@ public class AdminController {
     private final AdminService adminService;
     private final BorrowerQueryService borrowerQueryService;
     private final PdfExportService pdfExportService;
+    private final PasswordResetService passwordResetService;
 
     @PostMapping(value = "/borrowers", consumes = "multipart/form-data")
     public ResponseEntity<String> registerBorrower(
@@ -58,5 +63,13 @@ public class AdminController {
     @GetMapping("/borrowers/{id}")
     public ResponseEntity<com.crepusculum.loanapp.travel_loan_manager.dto.response.BorrowerDetailResponse> getBorrowerDetails(@PathVariable Long id) {
         return ResponseEntity.ok(adminService.getBorrowerDetails(id));
+    }
+
+    @PostMapping("/borrowers/{id}/reset-password")
+    public ResponseEntity<Map<String, String>> resetBorrowerPassword(
+            @PathVariable Long id,
+            @RequestBody AdminResetPasswordRequest request) {
+        passwordResetService.adminResetPassword(id, request.newPassword());
+        return ResponseEntity.ok(Map.of("message", "Password reset successfully. User will be required to change it on next login."));
     }
 }
