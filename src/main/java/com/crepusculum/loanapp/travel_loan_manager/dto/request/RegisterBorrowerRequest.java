@@ -2,6 +2,7 @@ package com.crepusculum.loanapp.travel_loan_manager.dto.request;
 
 import jakarta.validation.constraints.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.math.BigDecimal;
 
 public record RegisterBorrowerRequest(
@@ -41,5 +42,9 @@ public record RegisterBorrowerRequest(
         @Pattern(regexp = "^233\\d{9}$", message = "Guarantor phone must be in format 233xxxxxxxxx")
         String guarantorPhone,
 
-        String guarantorRelationship
-) {}
+        String guarantorRelationship,
+
+        @Email(message = "Invalid email format")
+        String email
+) {
+}
