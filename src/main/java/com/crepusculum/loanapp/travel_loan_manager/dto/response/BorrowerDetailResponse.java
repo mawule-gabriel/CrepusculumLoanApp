@@ -11,6 +11,7 @@ public record BorrowerDetailResponse(
         String ghanaCardNumber,
         String homeAddressGhana,
         String destinationAddress,
+        String email,
         String profilePictureUrl,
 
         BigDecimal loanAmount,
@@ -33,5 +34,6 @@ public record BorrowerDetailResponse(
             LocalDate date,
             String recordedBy,
             String note
-    ) {}
+    ) {
+    }
 }
