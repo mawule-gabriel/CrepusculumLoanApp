@@ -3,6 +3,7 @@ package com.crepusculum.loanapp.travel_loan_manager.controller;
 import com.crepusculum.loanapp.travel_loan_manager.dto.request.AdminResetPasswordRequest;
 import com.crepusculum.loanapp.travel_loan_manager.dto.request.RecordPaymentRequest;
 import com.crepusculum.loanapp.travel_loan_manager.dto.request.RegisterBorrowerRequest;
+import com.crepusculum.loanapp.travel_loan_manager.dto.response.AdminResetPasswordResponse;
 import com.crepusculum.loanapp.travel_loan_manager.dto.response.BorrowerSummaryResponse;
 import com.crepusculum.loanapp.travel_loan_manager.service.AdminService;
 import com.crepusculum.loanapp.travel_loan_manager.service.BorrowerQueryService;
@@ -13,8 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -66,10 +65,9 @@ public class AdminController {
     }
 
     @PostMapping("/borrowers/{id}/reset-password")
-    public ResponseEntity<Map<String, String>> resetBorrowerPassword(
+    public ResponseEntity<AdminResetPasswordResponse> resetBorrowerPassword(
             @PathVariable Long id,
             @RequestBody AdminResetPasswordRequest request) {
-        passwordResetService.adminResetPassword(id, request.newPassword());
-        return ResponseEntity.ok(Map.of("message", "Password reset successfully. User will be required to change it on next login."));
+        return ResponseEntity.ok(passwordResetService.adminResetPassword(id, request.newPassword()));
     }
 }
