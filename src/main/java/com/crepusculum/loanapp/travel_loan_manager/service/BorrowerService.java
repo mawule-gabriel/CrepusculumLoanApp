@@ -2,8 +2,13 @@ package com.crepusculum.loanapp.travel_loan_manager.service;
 
 import com.crepusculum.loanapp.travel_loan_manager.constant.ErrorMessages;
 import com.crepusculum.loanapp.travel_loan_manager.dto.request.RegisterBorrowerRequest;
-import com.crepusculum.loanapp.travel_loan_manager.entity.*;
-import com.crepusculum.loanapp.travel_loan_manager.repository.*;
+import com.crepusculum.loanapp.travel_loan_manager.entity.Borrower;
+import com.crepusculum.loanapp.travel_loan_manager.entity.Guarantor;
+import com.crepusculum.loanapp.travel_loan_manager.entity.Loan;
+import com.crepusculum.loanapp.travel_loan_manager.entity.Role;
+import com.crepusculum.loanapp.travel_loan_manager.repository.BorrowerRepository;
+import com.crepusculum.loanapp.travel_loan_manager.repository.GuarantorRepository;
+import com.crepusculum.loanapp.travel_loan_manager.repository.LoanRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -75,6 +80,7 @@ public class BorrowerService {
                 .phoneNumber(req.phoneNumber())
                 .homeAddressGhana(req.homeAddressGhana())
                 .destinationAddress(req.destinationAddress())
+                .email(req.email())
                 .profilePicturePath(profilePictureUrl)
                 .password(passwordEncoder.encode(password))
                 .role(Role.BORROWER)
