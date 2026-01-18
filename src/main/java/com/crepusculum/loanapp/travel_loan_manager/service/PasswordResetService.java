@@ -1,5 +1,6 @@
 package com.crepusculum.loanapp.travel_loan_manager.service;
 
+import com.crepusculum.loanapp.travel_loan_manager.dto.response.AdminResetPasswordResponse;
 import com.crepusculum.loanapp.travel_loan_manager.entity.Borrower;
 import com.crepusculum.loanapp.travel_loan_manager.entity.PasswordResetToken;
 import com.crepusculum.loanapp.travel_loan_manager.repository.BorrowerRepository;
@@ -38,7 +39,7 @@ public class PasswordResetService {
         }
 
         if (borrower.getEmail() == null || borrower.getEmail().isBlank()) {
-            return true;
+            throw new IllegalArgumentException("No email associated with this account. Please contact an Admin to reset your password.");
         }
 
         tokenRepository.deleteByBorrower(borrower);
@@ -84,15 +85,25 @@ public class PasswordResetService {
     }
 
     @Transactional
-    public void adminResetPassword(Long borrowerId, String newPassword) {
+    public AdminResetPasswordResponse adminResetPassword(Long borrowerId, String newPassword) {
         Borrower borrower = borrowerRepository.findById(borrowerId)
                 .orElseThrow(() -> new IllegalArgumentException("Borrower not found"));
 
-        borrower.setPassword(passwordEncoder.encode(newPassword));
+        String passwordToSet = newPassword;
+        if (passwordToSet == null || passwordToSet.isBlank()) {
+            passwordToSet = generateSecureToken().substring(0, 8);
+        }
+
+        borrower.setPassword(passwordEncoder.encode(passwordToSet));
         borrower.setPasswordResetRequired(true);
         borrowerRepository.save(borrower);
 
         tokenRepository.deleteByBorrower(borrower);
+
+        return new AdminResetPasswordResponse(
+                "Password reset successfully. User will be required to change it on next login.",
+                passwordToSet
+        );
     }
 
     @Transactional
