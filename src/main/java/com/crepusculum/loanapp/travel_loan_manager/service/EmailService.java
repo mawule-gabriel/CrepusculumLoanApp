@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +19,7 @@ public class EmailService {
     @Value("${app.password-reset.frontend-reset-url:http://localhost:5173/reset-password}")
     private String resetBaseUrl;
 
+    @Async
     public void sendPasswordResetEmail(String toEmail, String token) {
         String resetLink = resetBaseUrl + "?token=" + token;
 
